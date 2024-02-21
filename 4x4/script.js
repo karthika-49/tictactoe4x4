@@ -8,7 +8,8 @@ let board = [
   let ai = 'X';
   let human = 'O';
   let currentPlayer = human;
-  
+  let winningCombination = null;
+
   function setup() {
     createCanvas(450, 450);
     w = width / 4;
@@ -50,6 +51,7 @@ console.log(width, height)
   
     for (let i = 0; i < 4; i++) {
       if (equals4(board[i][0], board[i][1], board[i][2], board[i][3])) {
+        winningCombination = [board[i][0], board[i][1], board[i][2], board[i][3]];
         winner = board[i][0];
       }
     }
@@ -57,14 +59,17 @@ console.log(width, height)
     for (let i = 0; i < 4; i++) {
       if (equals4(board[0][i], board[1][i], board[2][i], board[3][i])) {
         winner = board[0][i];
+        winningCombination = [board[0][i], board[1][i], board[2][i], board[3][i]];
       }
     }
   
     if (equals4(board[0][0], board[1][1], board[2][2], board[3][3])) {
       winner = board[0][0];
+      winningCombination = [board[0][0], board[1][1], board[2][2], board[3][3]];
     }
     if (equals4(board[3][0], board[2][1], board[1][2], board[0][3])) {
       winner = board[3][0];
+      winningCombination = [board[3][0], board[2][1], board[1][2], board[0][3]];
     }
   
     let openSpots = 0;
@@ -139,6 +144,18 @@ function draw() {
         resultP.html('Tie!');
       } else {
         resultP.html(`${result} wins!`);
+      }
+      if (winningCombination !== null && result!=='tie') {
+        strokeWeight(10);
+        stroke(0, 255, 0);
+        noFill();
+        beginShape();
+        for (let [i, j] of winningCombination) {
+          let x = w * i + w / 2;
+            let y = h * j + h / 2;
+          vertex(x, y);
+        }
+        endShape();
       }
     }
   
